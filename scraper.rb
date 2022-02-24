@@ -30,6 +30,9 @@ CSV.open("articles.csv", "a+") do |csv|
     title = card.xpath("div[@class='td-module-thumb']/a/@title")
     link = card.xpath("div[@class='td-module-thumb']/a/@href")
     meta = card.xpath("div[@class='item-details']/div[@class='td-excerpt']")
+
+    csv << [title.first.value, link.first.value, meta.first.text.strip]
   end
 
 end
+
