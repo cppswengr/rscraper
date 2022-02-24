@@ -4,6 +4,8 @@ require 'watir'
 require 'webdrivers'
 require 'nokogiri'
 
+require 'csv'
+
 browser = Watir::Browser.new
 browser.goto 'https://blog.eatthismuch.com/latest-articles'
 parsed_page = Nokogiri::HTML(browser.html)
@@ -18,3 +20,16 @@ links = parsed_page.css('a')
 links.map { |element| element['href'] }
 
 puts links
+
+CSV.open("articles.csv", "a+") do |csv|
+  csv << %w[title link meta]
+
+  article_cards = parsed_page.xpath("//div[contains(@class, 'td_module_10')]")
+
+  article_cards.each do |card|
+    title = card.xpath("div[@class='td-module-thumb']/a/@title")
+    link = card.xpath("div[@class='td-module-thumb']/a/@href")
+    meta = card.xpath("div[@class='item-details']/div[@class='td-excerpt']")
+  end
+
+end
